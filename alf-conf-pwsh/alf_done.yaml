@@ -1,0 +1,121 @@
+all-groups: cut -d: -f1 /etc/group | sort
+cdp: cd ~/Projects; clear; pwd
+c: cd $1; clear; pwd
+compare-dir: diff --brief -Nr
+count: ls -1 ${1:-.} | wc -l
+
+cm: chmod $1 $2
+cmr: chmod $1 -R $2
+
+co: chown $1 $2
+cor: chown $1 -R $2
+
+d: docker
+  psf: ps --format "{{.ID}} {{.Names}}\t{{.Status}}  {{.Ports}}"
+  paf: ps -a --format="table {{.Names}}\t{{.Status}}\t{{.ID}}"
+  p: ps -a
+  clean: system prune -f
+  deploy: stack deploy -c $1.yml $1
+  i: images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+  images: images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+  n: network
+  rmi: images --format "{{.Repository}}:{{.Tag}}" |grep $1 | xargs docker rmi -f
+  rmv: volume ls --format "{{.Name}}" |grep $1 |xargs docker volume rm -f
+  v: volume
+  r: run -it --rm
+  replicas: service ls --format='table {{.Name}}\t{{.Mode}}\t{{.Replicas}}'
+  s: service
+  st: stack
+  size: images --format '{{.Size}}\t{{.Repository}}:{{.Tag}}' | sort -h | column -t
+  stats: stats --format "{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
+
+dc: docker-compose
+  ud: up -d
+  ub: up -d --build
+  ur: up -d --force-recreate
+  ubr: up -d --build --force-recreate
+  u: up
+  eb: exec $1 /bin/bash
+  e: exec $1 ${@:2}
+  rb: run --rm $1 /bin/bash
+  r: run --rm $1 ${@:2}
+  d: down
+  sael: exec $1 cat /var/log/apache2/error.log
+  stael: exec $1 tail -f /var/log/apache2/error.log
+  lf: logs -f
+
+
+dclf: dc logs -f
+
+dfh: df -H
+dfhd: df -H | grep -v -e "/dev/loop" -e "tmpfs" -e "udev"
+duh: du -ach
+
+dps: d ps
+dpsa: d ps -a
+
+g: git
+  s: status
+  l: log --all --graph --date=relative --pretty=format:'%h %Cgreen%ad%Creset %Cblue%an%Creset%n        %s%n       %C(auto)%d%Creset'
+  ll: log --graph --oneline --decorate --all
+  tail: log -${1:-5} --all --date=relative --pretty=format:'%h %Cgreen%ad%Creset %x09%Cblue%s%Creset'
+  c: add . --all && git commit -am
+  p: push
+  m: merge
+  b: branch
+  d: diff
+  co: checkout
+  cp: cherry-pick
+  pl: pull
+  ls: ls-tree --full-name --name-only -r HEAD
+  chmod: update-index --chmod
+  compare: diff --stat --color $1..HEAD
+  datelog: log --pretty=format:'%h %ad%x09%an%x09%s' --date=short
+  discard: checkout -- . ; git clean -fd
+  history: log -p
+  optimize: repack -ad && sleep 2 && git gc
+  remote-delete: push origin --delete
+  rebuild: commit --allow-empty -m "trigger rebuild" ; git push
+  rename: branch -m
+  resolve-ours: checkout --ours . ; git add -u ; git commit -m 'resolve conflicts with --ours'
+  resolve-theirs: checkout --theirs . ; git add -u ; git commit -m 'resolve conflicts with --theirs'
+  rollback: revert --no-commit $1..HEAD
+  shallow-clone: clone --depth 1
+  upstream: checkout master && git fetch upstream && git merge upstream/master
+
+  # show age of all git repos in subdirectories
+  age: !for d in ./*/; do echo -e "\n\e[34m$d\e[0m" ; git -C $d log -1 --all --date=relative --pretty=format:'%Cgreen%ad%Creset %x09%s%n' ; done;
+
+gg: g p
+ggt: gg && gg --tag
+gpl: g pl
+
+killport: [[ $(lsof -ti:$1) ]] && kill -9 $(lsof -ti:$1)
+l: ls -lah
+le: exa -lah
+
+# TODO: Fix PowerShell without Ifconfig and Ipconfig
+#myip: ifconfig |head -n2 |sed -rn 's/.*addr:([^ ]+) .*/\1/p'
+nv: env |grep -i
+psf: ps -ef |grep
+py: python3
+repeat: for i in `seq $1`; do ${@:2} ; done
+# TODO: runas
+#runas: sudo su -s /bin/sh $1 -c "$2"
+r: clear; ${@:1}
+title: echo -ne "\033]0;${@:1}\007"
+update: sudo apt update; sudo apt upgrade -y; sudo apt autoremove; brew update; brew upgrade; sudo snap refresh
+superlinter: sudo docker pull github/super-linter:latest; sudo docker run -e RUN_LOCAL=true -v $PWD:/tmp/lint github/super-linter
+ver: lsb_release -drc
+p: pwbs
+y: yarn
+n: npm
+v: nvim
+loop_infinite: while true; do ${@:1}; sleep 1; done
+which_package: dpkg -S ${@:1}
+w: echo "starting watcher";
+  dfh: for ((i=1; i>0; i+=1)); do r dfh; echo "Rendered $i time"; sleep 1; done
+  odc-ps: for ((i=1; i>0; i+=1)); do r odc ps; echo "Rendered $i time"; sleep 1;done
+  dc-ps: for ((i=1; i>0; i+=1)); do r dc ps; echo "Rendered $i time"; sleep 1; done
+  ls: for((i=1; i>0; i+=1)); do r ls -lah; echo "Rendered $i time"; sleep 1; done
+check_certificate: echo | openssl s_client -showcerts -servername $1 -connect $1:$2 2>/dev/null | openssl x509 -inform pem -noout -text | grep -e Before -e After #Done jako Check-SSLCertificate Cmdlet

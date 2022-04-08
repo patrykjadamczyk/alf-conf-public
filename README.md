@@ -7,5 +7,6 @@ Initially my alf-conf was private because alf have option to easily save changes
 But I like concept of public dotfiles, so before I find good way to manage dotfiles for me. I will make public my aliases which is main part of my setup anyway.
 ## Folder Structure
 - `./alf-conf` - My configuration of alf for bash aliases
+- `./alf-conf-pwsh` - ./alf-conf but written for PowerShell
 - `./Bash` - bash_aliases made by alf from alf-conf
-- `./PowerShell` - my port of alf and additional aliases,functions etc. for PowerShell
+- `./PowerShell` - my port of alf aliases and additional aliases,functions etc. for PowerShell
