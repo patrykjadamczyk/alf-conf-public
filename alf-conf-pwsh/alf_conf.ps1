@@ -578,17 +578,17 @@ function ver {
 }
 
 # p: pwbs
-function ver {
+function p {
     pwbs $args
 }
 
 # y: yarn
-function ver {
+function y {
     yarn $args
 }
 
 # n: npm
-function ver {
+function n {
     npm $args
 }
 
