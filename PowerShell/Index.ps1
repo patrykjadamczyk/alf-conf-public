@@ -85,7 +85,7 @@ Write-Progress -ParentId 1 -Id 2 -Activity "Loading Cmdlet Library" -Completed
 
 ###### My Cmdlet Library
 Write-Progress -Id 1 -Activity "Loading PowerShell Profile File" -Status "4. My Cmdlet Library" -PercentComplete ((4/$__maxBaseSteps)*100) -CurrentOperation "Loading ..."
-$__maxSteps = 1;
+$__maxSteps = 2;
 $__step = 0;
 if ($_IsServer -and $_ServerConfig["OVH_Server"]) {
     $__maxSteps += 1;
@@ -98,6 +98,10 @@ $__steps += 1;
 Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Package-Manager" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
 $__PackageManager = Join-Path $PSScriptRoot "mycmdletlib" "Package-Manager.ps1"
 . $__PackageManager
+$__steps += 1;
+Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Restart-Session" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
+$__RestartSession = Join-Path $PSScriptRoot "mycmdletlib" "Restart-Session.ps1"
+. $__RestartSession
 
 ###### Profile Scripts
 Write-Progress -Id 1 -Activity "Loading PowerShell Profile File" -Status "5. Profile Scripts" -PercentComplete ((5/$__maxBaseSteps)*100) -CurrentOperation "Loading ..."
