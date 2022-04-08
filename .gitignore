@@ -1,0 +1,9 @@
+#### IDE
+.idea
+#### Secret Stuff
+# For secret prefiled stuff. If something needs token of some sort for example
+*secret*
+# Test scripts
+.test
+# Magic .hide folder
+.hide
