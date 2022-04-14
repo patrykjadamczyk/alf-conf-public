@@ -135,7 +135,7 @@ function d {
             docker system prune -f $pas_args
         }
         "deploy" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker stack deploy -c $1.yml $1
         }
         "i" {
@@ -148,11 +148,11 @@ function d {
             docker network $pas_args
         }
         "rmi" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker images --format "{{.Repository}}:{{.Tag}}" | Select-String -Pattern $1 | ForEach-Object { docker rmi -f $_ }
         }
         "rmv" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker volume ls --format "{{.Name}}" | Select-String -Pattern $1 | ForEach-Object { docker volume rm -f $_ }
         }
         "v" {
@@ -210,32 +210,30 @@ function dc {
             docker-compose up $pas_args
         }
         "eb" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker-compose exec $1 /bin/bash
         }
         "e" {
-            $1 = $pas_args[0];
-            $rest = $pas_args[1..($pas_args.Length-1)];
+            $1, $rest = $pas_args;
             docker-compose exec $1 $rest
         }
         "rb" {
-            $1 = $pas_args[0];
-            docker-compose run --rm $1 /bin/bash $pas_args
+            $1, $rest = $pas_args;
+            docker-compose run --rm $1 /bin/bash $rest
         }
         "r" {
-            $1 = $pas_args[0];
-            $rest = $pas_args[1..($pas_args.Length-1)];
+            $1, $rest = $pas_args;
             docker-compose run --rm $1 $rest
         }
         "d" {
             docker-compose down $pas_args
         }
         "sael" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker-compose exec $1 cat /var/log/apache2/error.log
         }
         "stael" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             docker-compose exec $1 tail -f /var/log/apache2/error.log
         }
         "lf" {
@@ -321,7 +319,7 @@ function g {
             git log --graph --oneline --decorate --all $pas_args
         }
         "tail" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             if ([string]::IsNullOrWhiteSpace($1)) {
                 $1 = "-5"
             } else {
@@ -364,7 +362,7 @@ function g {
             git update-index --chmod $pas_args
         }
         "compare" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             git diff --stat --color $1..HEAD
         }
         "datelog" {
@@ -407,7 +405,7 @@ function g {
             git commit -m 'resolve conflicts with --theirs' $pas_args
         }
         "rollback" {
-            $1 = $pas_args[0];
+            $1, $rest = $pas_args;
             git revert --no-commit $1..HEAD
         }
         "shallow-clone" {
