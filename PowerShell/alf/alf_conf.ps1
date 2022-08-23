@@ -547,9 +547,17 @@ function title (
 # update: sudo apt update; sudo apt upgrade -y; sudo apt autoremove; brew update; brew upgrade; sudo snap refresh
 function update {
     if ($_isLinux) {
-        sudo apt update;
-        sudo apt upgrade -y;
-        sudo apt autoremove -y;
+        try {
+            if(Get-Command nala) {
+                sudo nala update;
+                sudo nala upgrade -y;
+                sudo nala autoremove -y;
+            }
+        } catch {
+            sudo apt update;
+            sudo apt upgrade -y;
+            sudo apt autoremove -y;
+        }
         brew update;
         brew upgrade;
         sudo snap refresh
