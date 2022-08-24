@@ -23,6 +23,9 @@ function Test-IsWSL {
     }
     return $false
 }
+##### Add needed libraries
+$__LibAdmin = Join-Path $PSScriptRoot "Use-Administrator-Privilleges.ps1"
+. $__LibAdmin
 #### Package Managers
 function Get-Status-Windows-WinGet-Package-Manager {
     if ($_IsWindows) {
@@ -1168,16 +1171,27 @@ function Update-All-System-Packages() {
     Update-All-Windows-WinGet-Packages
     Update-All-Windows-Choco-Packages
     Update-All-Windows-Scoop-Packages
-    Update-All-Linux-Nala-Packages
-    Update-All-Linux-Apt-Packages
-    Update-All-Linux-Yum-Packages
-    Update-All-Linux-Dnf-Packages
-    Update-All-Linux-Pacman-Packages
-    Update-All-Linux-Pacstall-Packages
-    Update-All-Linux-Apk-Packages
-    Update-All-Linux-Flatpak-Packages
-    Update-All-Linux-Snap-Packages
+
+    Use-Administrator-Privilleges {
+        if (Get-Status-Linux-Nala-Package-Manager)
+        {
+            Update-All-Linux-Nala-Packages
+        }
+        else
+        {
+            Update-All-Linux-Apt-Packages
+        }
+        Update-All-Linux-Yum-Packages
+        Update-All-Linux-Dnf-Packages
+        Update-All-Linux-Pacman-Packages
+        Update-All-Linux-Pacstall-Packages
+        Update-All-Linux-Apk-Packages
+        Update-All-Linux-Flatpak-Packages
+        Update-All-Linux-Snap-Packages
+    }
+
     Update-All-Brew-Packages
+
     Update-All-Mac-BrewCask-Packages
     Update-All-Mac-Mas-Packages
 

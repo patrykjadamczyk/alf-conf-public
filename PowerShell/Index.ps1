@@ -77,7 +77,7 @@ $__Script15 = Join-Path $PSScriptRoot "cmdletlib" "Check-SSLCertificate.ps1"
 Write-Progress -ParentId 1 -Id 2 -Activity "Loading Cmdlet Library" -Status "Test-Command" -PercentComplete ((16/$__maxSteps)*100) -CurrentOperation "Loading ..."
 $__Script16 = Join-Path $PSScriptRoot "cmdletlib" "Test-Command.ps1"
 . $__Script16
-# Test-Command
+# Test-IsWSL
 Write-Progress -ParentId 1 -Id 2 -Activity "Loading Cmdlet Library" -Status "Test-IsWSL" -PercentComplete ((17/$__maxSteps)*100) -CurrentOperation "Loading ..."
 $__Script17 = Join-Path $PSScriptRoot "cmdletlib" "Test-IsWSL.ps1"
 . $__Script17
@@ -95,6 +95,13 @@ if ($_IsServer -and $_ServerConfig["OVH_Server"]) {
     . $__OVHBackupStorageScript
 }
 $__steps += 1;
+Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Use-Administrator-Privilleges" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
+$__UseAdministratorPrivilleges = Join-Path $PSScriptRoot "mycmdletlib" "Use-Administrator-Privilleges.ps1"
+. $__UseAdministratorPrivilleges
+$__steps += 1;
+Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Use-WSL" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
+$__UseWSL = Join-Path $PSScriptRoot "mycmdletlib" "Use-WSL.ps1"
+. $__UseWSL
 Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Package-Manager" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
 $__PackageManager = Join-Path $PSScriptRoot "mycmdletlib" "Package-Manager.ps1"
 . $__PackageManager
@@ -102,6 +109,10 @@ $__steps += 1;
 Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Restart-Session" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
 $__RestartSession = Join-Path $PSScriptRoot "mycmdletlib" "Restart-Session.ps1"
 . $__RestartSession
+$__steps += 1;
+Write-Progress -ParentId 1 -Id 2 -Activity "Loading My Cmdlet Library" -Status "Run-DockerShellImage" -PercentComplete (($__step/$__maxSteps)*100) -CurrentOperation "Loading ..."
+$__RunDockerShellImage = Join-Path $PSScriptRoot "mycmdletlib" "Run-DockerShellImage.ps1"
+. $__RunDockerShellImage
 
 ###### Profile Scripts
 Write-Progress -Id 1 -Activity "Loading PowerShell Profile File" -Status "5. Profile Scripts" -PercentComplete ((5/$__maxBaseSteps)*100) -CurrentOperation "Loading ..."
